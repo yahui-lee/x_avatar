@@ -1,0 +1,41 @@
+# @package _global_
+
+dataset_name: LYH4
+
+dataset:
+  name: zjumocap
+  root_dir: "./data/ZJUMoCap"
+  subject: LYH4
+  refine: false
+
+  train_views: [ '1' ]
+  val_views: ['1']
+  test_views:
+    view: ${dataset.val_views}
+    video: ['1']
+    all: []
+  predict_views: ['1']
+  #train_frames: [0,34, 3]
+  train_frames: [30,1300, 4]
+  val_frames: [ 30,1300, 200 ]
+  test_frames:
+    view: [01,1327, 1]
+    video: [ 0,1327, 180]
+    all: [  0,1327,180]
+  predict_frames: [0,0, 1]
+
+  origin_hw:
+    - 1280
+    - 1080
+    
+  img_hw:
+    - 1060
+    - 900
+    
+  lanczos: false
+  resolution: -1
+  white_background: True
+  data_device: cuda
+  eval: false
+  smpl_type: smplx
+  # freeview: true
