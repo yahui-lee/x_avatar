@@ -7,11 +7,11 @@ Python 3.7.13, PyTorch 1.12.1 with CUDA 11.6 and cuDNN 8.3.2, Ubuntu 22.04/CentO
 
 To clone the repo, run either:
 ```
-git clone --recursive https://github.com/mikeqzy/3dgs-avatar-release.git
+git clone --recursive https://github.com/yahui-lee/x_avatar.git
 ```
 or
 ```
-git clone https://github.com/mikeqzy/3dgs-avatar-release.git
+git clone https://github.com/yahui-lee/x_avatar.git
 cd 3dgs-avatar-release
 git submodule update --init --recursive
 ```
