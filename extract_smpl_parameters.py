@@ -43,7 +43,7 @@ if __name__ == '__main__':
         np.savez('body_models/miscx/faces.npz', faces=data_m['f'].astype(np.int64))
         np.savez('body_models/miscx/J_regressors.npz', male=data_m['J_regressor'], female=data_f['J_regressor'], neutral=data_n['J_regressor'])
         np.savez('body_models/miscx/posedirs_all.npz', male=data_m['posedirs'], female=data_f['posedirs'], neutral=data_n['posedirs'])
-        np.savez('body_models/miscx/shapedirs_all.npz', male=data_m['shapedirs'][:, :, :10], female=data_f['shapedirs'][:, :, :10], neutral=data_n['shapedirs'][:, :, :10])
+        np.savez('body_models/miscx/shapedirs_all.npz', male=data_m['shapedirs'][:, :, :100], female=data_f['shapedirs'][:, :, :100], neutral=data_n['shapedirs'][:, :, :100])
         # np.savez('body_models/miscx/shapedirs_all.npz', male=data_m['shapedirs'][:, :, :20], female=data_f['shapedirs'][:, :, :20], neutral=data_n['shapedirs'][:, :, :20])
         np.savez('body_models/miscx/skinning_weights_all.npz', male=data_m['weights'], female=data_f['weights'], neutral=data_n['weights'])
         np.savez('body_models/miscx/v_templates.npz', male=data_m['v_template'], female=data_f['v_template'], neutral=data_n['v_template'])
