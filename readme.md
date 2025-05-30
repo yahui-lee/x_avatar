@@ -26,6 +26,24 @@ conda activate 3dgs-avatar
 # install tinycudann
 pip install git+https://github.com/NVlabs/tiny-cuda-nn/#subdirectory=bindings/torch
 ```
+### SMPL-X Setup
+Download `SMPL v1.0 for Python 2.7` from [SMPL website](https://smpl-x.is.tue.mpg.de/download.php). Remove the chumpy objects in these .pkl models using [this code](https://github.com/vchoutas/smplx/tree/master/tools) under a Python 2 environment (you can create such an environment with conda). Finally, rename the newly generated .pkl files and copy them to subdirectories under `./body_models/smplx/`. Eventually, the `./body_models` folder should have the following structure:
+```
+body_models
+ └-- smplx
+    ├-- male
+    |   └-- model.pkl
+    ├-- female
+    |   └-- model.pkl
+    └-- neutral
+        └-- model.pkl
+```
+
+Then, run the following script to extract necessary SMPLX parameters used in our code:
+```
+python extract_smpl_parameters.py
+```
+The extracted SMPL parameters will be saved into `./body_models/miscx/`.
 
 # train
 ```
