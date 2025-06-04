@@ -1,12 +1,12 @@
 defaults:
   - _self_
-  - dataset: LYH4
-  - pose_correction: direct
+  - dataset: SC01
+  - pose_correction: none
   - texture: shallow_mlp
   - rigid: skinning_field
   - non_rigid: hashgrid
   - option:
-      - iter30k
+      - iter50k
 
 hydra:
   run:
@@ -21,7 +21,7 @@ model:
   gaussian:
     use_sh: true
     sh_degree: 3
-    delay: 2000
+    delay: 4500
   pose_correction:
     name: direct
   deformer:
@@ -31,7 +31,7 @@ model:
       name: identity
 
 dataset:
-  preload: true
+  preload: false
   train_smpl: false
 
   mode: ${mode}
@@ -65,14 +65,14 @@ opt:
   lr_ratio: 0.01
 
   # loss weights
-  lambda_l1: 1.
+  lambda_l1: 1.5
   lambda_dssim: 0.
   lambda_perceptual: 1e-2
   mask_loss_type: l1
 #  lambda_mask: [0.1,5000,0]
-  lambda_mask: 0.1
+  lambda_mask: 0.08
   lambda_opacity: 0.
-  lambda_skinning: [10,1000,0.1]
+  lambda_skinning: [10,4000,0.1]
   lambda_pose: 0.
   lambda_aiap_xyz: 1.
   lambda_aiap_cov: 100.
@@ -88,7 +88,7 @@ opt:
 
 pipeline:
   convert_SHs_python: true
-  compute_cov3D_python: true
+  compute_cov3D_python: false
   debug: false
 
   pose_noise: 0.1
@@ -97,9 +97,9 @@ debug_from: -1
 detect_anomaly: false
 test_iterations: []
 test_interval: 2000
-save_iterations: [30000]
+save_iterations: [50000]
 seed: -1
-checkpoint_iterations: []
+checkpoint_iterations: [40000, 60000]
 start_checkpoint: null
 wandb_disable: false
 
