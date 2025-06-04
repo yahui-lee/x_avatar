@@ -45,16 +45,32 @@ python extract_smpl_parameters.py
 ```
 The extracted SMPL parameters will be saved into `./body_models/miscx/`.
 
+# Dataset preparation
+Due to license issues, we cannot publicly distribute our preprocessed ZJU-MoCap data. 
+Please follow the instructions of [ARAH](https://github.com/taconite/arah-release) to download and preprocess the datasets.
+
+
 # train
 ```
 python train.py dataset=DATASET_NAME
 python train.py dataset=BUPT3
 ```
 
-# evaluation
+# Evaluation
 ```
 python render.py mode=test dataset.test_mode=view dataset=DATASET_NAME
 ```
+# Test on out-of-distribution poses
+To animate the subject under out-of-distribution poses, run
+```shell
+python render.py mode=predict dataset.predict_seq=0 dataset=zjumocap_377_mono
+```
+
+We provide four preprocessed sequences for each subject of ZJU-MoCap, 
+which can be specified by setting `dataset.predict_seq` to 0,1,2,3, 
+where `dataset.predict_seq=3` corresponds to the canonical rendering.
+
+Currently, the code only supports animating ZJU-MoCap models for out-of-distribution models.
 
 # Visualize
 ```
@@ -65,3 +81,7 @@ dataset.predict_seq=1  filename = 'gBR_sBM_cAll_d04_mBR1_ch06_view1'
 dataset.predict_seq=2  filename = 'MPI_Limits-03099-op8_poses_view1'
 dataset.predict_seq=3  filename = 'canonical_pose_view1'
 ```
+注意！！
+1. 本项目只支持smplx，且参数均设置为训练和驱动阿里数据集，训练其他数据需稍微修改超参数。
+2. 项目中的Visualize代码不完整，因为查看器的完整代码为单独一个项目，在之后会添加进去。
+3. 本项目用到的所有数据集均处理为Zju-mocap格式，所以即使不用zjumocap数据集，都要用到arah代码里的方法处理。
