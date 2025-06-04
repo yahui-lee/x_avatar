@@ -12,7 +12,7 @@
 import torch
 import math
 from diff_gaussian_rasterization import GaussianRasterizationSettings, GaussianRasterizer
-
+import os
 def render(data,
            iteration,
            scene,
@@ -28,7 +28,13 @@ def render(data,
     Background tensor (bg_color) must be on GPU!
     """
     pc, loss_reg, colors_precomp = scene.convert_gaussians(data, iteration, compute_loss)
+    # save pc and colors_precomp
+    print(colors_precomp.shape)
+    idx = data.frame_id
 
+    path = os.path.join('/home/lyh/pythonproject/xavatar/plysave', str(idx) + ".ply")
+    pc.save_ply(path)
+    # print(pc.get_xyz.shape,pc.get_features.shape)
     # Create zero tensor. We will use it to make pytorch return gradients of the 2D (screen-space) means
     screenspace_points = torch.zeros_like(pc.get_xyz, dtype=pc.get_xyz.dtype, requires_grad=True, device="cuda") + 0
     try:
@@ -74,7 +80,9 @@ def render(data,
     # If precomputed colors are provided, use them. Otherwise, if it is desired to precompute colors
     # from SHs in Python, do it. If not, then SH -> RGB conversion will be done by rasterizer.
     shs = None
-
+    #colors_precomp = None
+    if colors_precomp is None:
+        shs = pc.get_features
     # Rasterize visible Gaussians to image, obtain their radii (on screen). 
     rendered_image, radii = rasterizer(
         means3D = means3D,
