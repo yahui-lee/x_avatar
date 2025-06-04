@@ -309,8 +309,7 @@ def main(config):
 
     # set wandb logger
     wandb_name = config.name
-    os.environ["WANDB_API_KEY"] = 'b1a060f20a4bdd0a1f835ef3d86f119a3787d8ed'
-    os.environ["WANDB_MODE"] = "offline"
+
     wandb.init(
         mode="disabled" if config.wandb_disable else None,
         name=wandb_name,
