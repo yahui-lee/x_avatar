@@ -6,7 +6,7 @@ defaults:
   - rigid: skinning_field
   - non_rigid: hashgrid
   - option:
-      - iter50k
+      - iter80k
 
 hydra:
   run:
