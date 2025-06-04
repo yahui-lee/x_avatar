@@ -76,8 +76,8 @@ class ZJUMoCapDataset(Dataset):
 
         subject_dir = os.path.join(self.root_dir, self.subject)
         if split == 'predict':
-            predict_seqs = ['gBR_sBM_cAll_d04_mBR1_ch05_view1',
-                            'gBR_sBM_cAll_d04_mBR1_ch06_view1',
+            predict_seqs = ['seq1',
+                            'seq2',
                             'MPI_Limits-03099-op8_poses_view1',
                             'canonical_pose_view1',]
             predict_seq = self.cfg.get('predict_seq', 0)
@@ -302,16 +302,19 @@ class ZJUMoCapDataset(Dataset):
         # note that in ZJUMoCap the camera center does not align perfectly
         # here we try to offset it by modifying the extrinsic...
         M = np.eye(3)
-        M[0, 2] = (K[0, 2] - self.W / 2) / K[0, 0]
-        M[1, 2] = (K[1, 2] - self.H / 2) / K[1, 1]
+        w_ = K[0, 2] - self.W / 2
+        h_ = K[1, 2] - self.H / 2
+        M[0, 2] = (w_) / K[0, 0]
+        M[1, 2] = (h_) / K[1, 1]
         K[0, 2] = self.W / 2
         K[1, 2] = self.H / 2
         R = M @ R
         T = M @ T
 
         R = np.transpose(R)
+        #T =  -R @ T
         T = T[:, 0]
-
+        #print(K, R, T, cam_idx)
         image = cv2.cvtColor(cv2.imread(img_file), cv2.COLOR_BGR2RGB)
 
         if self.refine:
@@ -324,29 +327,41 @@ class ZJUMoCapDataset(Dataset):
         image = cv2.undistort(image, K, dist, None)
         mask = cv2.undistort(mask, K, dist, None)
 
+        # temp = np.float32([[1, 0, - w_], [0, 1, - h_]])
+        # # 进行2D 仿射变换(平移变换)
+        # image = cv2.warpAffine(image, temp, (self.W, self.H))
+        # mask = cv2.warpAffine(mask, temp, (self.W, self.H))
+
         lanczos = self.cfg.get('lanczos', False)
         interpolation = cv2.INTER_LANCZOS4 if lanczos else cv2.INTER_LINEAR
-
+        #_, mask = cv2.threshold(mask, 180, 255, cv2.THRESH_BINARY)
         image = cv2.resize(image, (self.w, self.h), interpolation=interpolation)
         mask = cv2.resize(mask, (self.w, self.h), interpolation=cv2.INTER_NEAREST)
 
-        #添加腐蚀操作：向内收缩掩膜
-        erosion_size = self.cfg.get('erosion_size', 5)  # 支持在配置中设定腐蚀大小
-        kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (erosion_size, erosion_size))
-        mask = cv2.erode(mask, kernel, iterations=1)
+        # #添加腐蚀操作：向内收缩掩膜
+        # erosion_size = self.cfg.get('erosion_size', 2)  # 支持在配置中设定腐蚀大小
+        # kernel = cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (erosion_size, erosion_size))
+        # mask = cv2.erode(mask, kernel, iterations=1)
 
-        # 掩膜转布尔
+        # # 掩膜转布尔
+        # mask = mask != 0  
+
+        # # 背景处理（白 or 黑）
+        # image[~mask] = 255. if self.white_bg else 0.
+
+        # # 归一化
+        # image = image / 255.
+
+        # # 转 PyTorch tensor
+        # image = torch.from_numpy(image).permute(2, 0, 1).float()  # [C, H, W]
+        # mask = torch.from_numpy(mask).unsqueeze(0).float()        # [1, H, W]
+
         mask = mask != 0
-
-        # 背景处理（白 or 黑）
         image[~mask] = 255. if self.white_bg else 0.
-
-        # 归一化
         image = image / 255.
 
-        # 转 PyTorch tensor
-        image = torch.from_numpy(image).permute(2, 0, 1).float()  # [C, H, W]
-        mask = torch.from_numpy(mask).unsqueeze(0).float()        # [1, H, W]
+        image = torch.from_numpy(image).permute(2, 0, 1).float()
+        mask = torch.from_numpy(mask).unsqueeze(0).float()
 
         # update camera parameters
         K[0, :] *= self.w / self.W
@@ -454,8 +469,8 @@ class ZJUMoCapDataset(Dataset):
                 faces = self.faces
                 mesh = trimesh.Trimesh(vertices=verts, faces=faces)
                 face_weights = np.mean(self.skinning_weights['neutral'][faces], axis=1)
-                n_points_hand = 5_000
-                n_points_body = 45_000
+                n_points_hand = 10_000
+                n_points_body = 90_000
 
                 # 计算手部面权重
                 hand_joint_indices = [
