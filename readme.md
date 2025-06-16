@@ -112,3 +112,6 @@ dataset.predict_seq=3  filename = 'canonical_pose_view1'
 │   └── ...000000.npz
 ```
 2. 阿里数据集的smplx全局旋转和平移的前向蒙皮过程和官方不一样，需要进行修正，这里给出修正代码（Talkbody/fix_error_ali.py），根据需求自行修改
+```
+origindata -> origindata(fix_error_ali.py) -> ali.json -> ali.npz
+```
