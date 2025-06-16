@@ -6,10 +6,11 @@ import numpy as np
 from scipy.spatial.transform import Rotation
 import trimesh
 import matplotlib.pyplot as plt
-model_path = 'smplx'  # smplx
+# 请将/smplx/SMPLX_{性别}.pkl放在此目录下(代码会读取路径：'path/smplx/SMPLX_{}.pkl')，文件可从smplx官网下载
+model_path = 'path'  # smplx
 model_gender = 'MALE'
 #可以自行添加维度，SMPLX最高支持300维shape，100维expression
-body_model = load_model(gender=model_gender, model_type=model_path, num_shape_coeffs = 100, num_expression_coeffs = 50)
+body_model = load_model(gender=model_gender, model_path=model_path, num_shape_coeffs = 100, num_expression_coeffs = 50)
 
 def get_minimal_shape(t_params):
     body_params = dict()
