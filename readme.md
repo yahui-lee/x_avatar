@@ -96,8 +96,8 @@ dataset.predict_seq=3  filename = 'canonical_pose_view1'
 ├── cam_params.json         # 相机参数文件
 ├── cano_smpl.ply           # SMPL模型文件
 ├── 1/                      # 相机1的图片文件夹
-│   ├── 000000.jpg
-│   ├── 000000.png
+│   ├── 000000.jpg          # 图片
+│   ├── 000000.png          # 掩膜
 │   ├── 000001.jpg
 │   ├── 000001.png
 │   └── ...
