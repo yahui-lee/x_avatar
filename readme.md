@@ -87,7 +87,7 @@ dataset.predict_seq=3  filename = 'canonical_pose_view1'
 3. 本项目用到的所有数据集均处理为Zju-mocap格式，所以即使不用zjumocap数据集，都要用到arah代码里的方法处理。
 
 # ALi Data
-关于阿里，数据集，提供dataprocess_ali.py，方便处理此数据，具体输入（处理原始数据格式，方便后续处理）和输出（经处理，可以被x_avatar读取，训练)参考ali.json和ali.npz
+关于阿里，数据集，提供dataprocess_ali.py（如提示需要J_regressor_body25_smplx.txt，可在TalkBody目录下获取，其与SMPLX_{}.pkl文件父目录在同一目录下），方便处理此数据，具体输入（处理原始数据格式，方便后续处理）和输出（经处理，可以被x_avatar读取，训练)参考ali.json和ali.npz
 注：
 1. 上述为smplx数据的处理，其他数据（如图片，掩膜，相机参数）的摆放如下，相机参数格式参考cam_params.json（只需要修改K,D,R,T)：
 
